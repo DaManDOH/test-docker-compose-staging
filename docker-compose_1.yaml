@@ -1,0 +1,19 @@
+# Enhancement of example from https://docs.docker.com/reference/compose-file/build/#additional_contexts
+# Attempt to reference the base image by tag
+name: compose-staging-test
+services:
+  base:
+    build:
+      context: .
+      dockerfile_inline: |
+        FROM alpine # using the latest official image from https://hub.docker.com/_/alpine
+        RUN echo -en "\e[92mThis file is from the base service's image.\e[0m\n" > ~/a-file.txt
+      # Reinforcing Compose's default image tag
+      tags:
+        - "compose-staging-test-base:latest"
+  my-service:
+    build:
+      context: .
+      dockerfile_inline: |
+        FROM compose-staging-test-base:latest
+        RUN echo -en "\e[93mMeanwhile, here's a file created during the my-service service's image build.\e[0m\n" > ~/another-file.txt
