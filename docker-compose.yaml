@@ -1,0 +1,15 @@
+services:
+ base:
+  build:
+    context: .
+    dockerfile_inline: |
+      FROM alpine
+      RUN ls -Al ~
+ my-service:
+  build:
+    context: .
+    dockerfile_inline: |
+      FROM base # image built for service base
+      RUN cat /etc/os-release
+    additional_contexts:
+      base: service:base

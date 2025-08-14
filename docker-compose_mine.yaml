@@ -1,0 +1,15 @@
+services:
+  base:
+    build:
+      context: .
+      dockerfile_inline: |
+        FROM node:lts-bookworm-slim
+        COPY ./base_stage/base_stage_file.txt
+  child:
+    build:
+      context: .
+      dockerfile_inline: |
+        FROM base
+        COPY ./child_stage/child_stage_file.txt
+      additional_contexts:
+        base: services:base
