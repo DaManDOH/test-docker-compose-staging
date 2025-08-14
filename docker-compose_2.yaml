@@ -4,12 +4,16 @@ services:
       context: .
       dockerfile_inline: |
         FROM node:lts-bookworm-slim
-        COPY ./base_stage/base_stage_file.txt
+        COPY ./base_stage/base_stage_file.txt .
   child:
     build:
       context: .
       dockerfile_inline: |
         FROM base
-        COPY ./child_stage/child_stage_file.txt
+        COPY ./child_stage/child_stage_file.txt .
       additional_contexts:
-        base: services:base
+        base: service:base
+        ## All of the below result in a poorly defined Compose YAML
+        # base: services:base
+        # base: services.base
+        # base: service.base
