@@ -1,15 +1,21 @@
+# name: compose-staging-test
 services:
- base:
-  build:
-    context: .
-    dockerfile_inline: |
-      FROM alpine
-      RUN ls -Al ~
- my-service:
-  build:
-    context: .
-    dockerfile_inline: |
-      FROM base # image built for service base
-      RUN cat /etc/os-release
-    additional_contexts:
-      base: service:base
+  base:
+    build:
+      context: .
+      dockerfile_inline: |
+        FROM alpine
+        RUN echo -en "\e[92mThis file is from the base service's image.\e[0m\n" > ~/a-file.txt
+      # tags:
+      #   - "compose-staging-test-base:latest"
+  my-service:
+    build:
+      context: .
+      dockerfile_inline: |
+        FROM base
+        RUN echo -en "\e[93mMeanwhile, here's a file created during the my-service service's image build.\e[0m\n" > ~/another-file.txt
+      additional_contexts:
+        base: "service:base"
+      # dockerfile_inline: |
+      #   FROM compose-staging-test-base:latest
+      #   RUN echo -en "\e[93mMeanwhile, here's a file created during the my-service service's image build.\e[0m\n" > ~/another-file.txt
