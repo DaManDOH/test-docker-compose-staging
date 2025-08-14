@@ -1,5 +1,5 @@
 # Example from https://docs.docker.com/reference/compose-file/build/#additional_contexts
-# Added actual executable RUN commands
+# Added actually executable RUN commands
 services:
   base:
     build:
